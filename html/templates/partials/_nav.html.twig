@@ -11,14 +11,12 @@
                     <ul class="list-unstyled">
                         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                             <li><a href="{{ path('app_logout') }}" class="text-white">logout</a></li>
-                            <li><a href="{{ path('pizza_index') }}" class="text-white">Pizza</a></li>
                         {% else %}
                             <li><a href="{{ path('app_login') }}" class="text-white">login</a></li>
                             <li><a href="{{ path('app_register') }}" class="text-white">register</a></li>
                         {% endif %}
 
                         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                            <li><a href="{{ path('category_index') }}" class="text-white">Categories</a></li>
                         {% endif %}
                     </ul>
                 </div>
