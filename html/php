@@ -1,0 +1,5 @@
+
+ What style of authentication do you want? [Empty authenticator]:
+  [0] Empty authenticator
+  [1] Login form authenticator
+ > 

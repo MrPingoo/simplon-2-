@@ -1,0 +1,46 @@
+version: '2'
+
+services:
+    db:
+        image: mysql
+        command: --default-authentication-plugin=mysql_native_password
+        volumes:
+            - "./.docker/data/db:/var/lib/mysql"
+        ports:
+            - 3306:3306
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    php:
+        build:
+            context: .docker/config/php7.2-fpm
+            args:
+                TIMEZONE: ${TIMEZONE}
+        volumes:
+            - simplon-sync:/var/www/html:nocopy
+            - ./.docker/config/php7.2-fpm/config/php-ini-overrides.ini:/usr/local/etc/php/conf.d/99-overrides.ini
+    nginx:
+        build:
+            context: .docker/config/nginx
+            args:
+                PROJECT_NAME: ${PROJECT_NAME}
+        ports:
+            - 80:80
+        volumes_from:
+            - php
+        volumes:
+            - ./.docker/logs/nginx/:/var/log/nginx
+    mailhog:
+        image: mailhog/mailhog
+        ports:
+          - 1025:1025 # smtp server
+          - 8025:8025 # web ui
+    adminer:
+        image: adminer
+        ports:
+            - 8080:8080
+volumes:
+    simplon-sync:
+        external: true

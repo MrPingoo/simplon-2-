@@ -1,0 +1,8 @@
+version: "2"
+options:
+    verbose: true
+
+syncs:
+  simplon-sync:
+      src: './html/'
+      sync_excludes: ['.gitignore', '.git', '.docker', 'docker-compose.yml', 'docker-sync.yml', 'Makefile', 'docker-compose-dev.yml', '.docker-sync', 'var/cache']

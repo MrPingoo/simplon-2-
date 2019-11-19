@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pizza{% endblock %}
+
+{% block body %}
+
+    {% for v in vars %}
+        {% if v == 'a'  %}
+            <b>{{ v }}</b><br/>
+        {% else %}
+            {{ v }}
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}
