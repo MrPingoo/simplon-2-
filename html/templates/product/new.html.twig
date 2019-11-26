@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+{% import _self as macros %}
+
+{% block title %}New Product{% endblock %}
+
+{% block body %}
+    <h1>Create new Product</h1>
+
+    {{ include('product/_form.html.twig') }}
+
+    <a href="{{ path('admin_product_index') }}">back to list</a>
+{% endblock %}
+
+{% block javascriptsCustom %}
+    <script type="text/javascript" language="javascript" src="/assets/js/dataprototyp.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            applyCollection();
+        });
+
+        function applyCollection() {
+            $('.collection').collection({
+                onAdd: function ($item)
+                {
+                    if ($('.item').length > 90) {
+                        $item.remove();
+                    }
+                }
+            });
+        }
+    </script>
+{% endblock %}

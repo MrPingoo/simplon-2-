@@ -1,0 +1,52 @@
+{% import _self as macros %}
+
+{{ form_start(form) }}
+    {{ form_label(form.name) }}
+    {{ form_widget(form.name) }}
+    {{ form_label(form.price) }}
+    {{ form_widget(form.price) }}
+    {{ form_label(form.description) }}
+    {{ form_widget(form.description) }}
+    {{ form_label(form.shippingCost) }}
+    {{ form_widget(form.shippingCost) }}
+    {{ form_label(form.address) }}
+    {{ form_widget(form.address) }}
+    {{ form_label(form.category) }}
+    {{ form_widget(form.category) }}
+
+<div class="tab-fact collection" data-prototype="{{ macros.picture_items(form.pictures.vars.prototype, true, form.vars.data)|e }}">
+    {% for item in form.pictures %}
+        {{ macros.picture_items(item, false, product) }}
+    {% endfor %}
+    {% do form.pictures.setRendered %}
+    {% macro picture_items(form_, prototype, product) %}
+        {% import _self as macros %}
+        {{ macros.picture_items(form_.pictures, prototype, product) }}
+    {% endmacro %}
+    {% macro picture_items(item_form, prototype, product) %}
+        <div data-repeater-item id="clone-tab" class="align-items-center item line-item">
+            <div class="form-group row">
+                <div class="col-md-6">
+                    {{ form_widget(item_form.path) }}
+                </div>
+            </div>
+
+            <div class="col-md-2 offset-md-10 text-right">
+                <a href="javascript:;" data-repeater-delete="" class="btn-sm btn btn-label-danger btn-bold remove-item">
+                    <i class="la la-trash-o"></i>
+                    Supprimer
+                </a>
+            </div>
+        </div>
+    {% endmacro %}
+    <div class="form-group form-group-last row">
+        <div class="col-12">
+            <a href="javascript:;" data-repeater-create="" class="btn btn-bold btn-sm btn-label-brand add-item">
+                <i class="la la-plus"></i> Ajouter
+            </a>
+        </div>
+    </div>
+</div>
+
+<button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form, {'render_rest': true}) }}
