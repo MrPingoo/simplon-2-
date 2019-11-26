@@ -7,6 +7,7 @@ use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use App\Service\FileUploaderService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +22,7 @@ class DefaultController extends AbstractController
     public function index(ProductRepository $productRepository): Response
     {
         return $this->render('default/index.html.twig', [
-            'products' => $productRepository->findByState(0),
+            'products' => $productRepository->findByStateAndCreatedAt(0),
         ]);
     }
 
@@ -83,6 +84,45 @@ class DefaultController extends AbstractController
         }
 
         return $this->render('default/new.html.twig', [
+            'product' => $product,
+            'form' => $form->createView(),
+        ]);
+    }
+
+
+    /**
+     * @Route("/product/{id}/edit", name="product_edit", methods={"GET","POST"})
+     */
+    public function edit(Request $request, Product $product, FileUploaderService $fileUploader): Response
+    {
+        foreach ($product->getPictures() as $p) {
+            $p->setPath(
+                new File($this->getParameter('product_directory').$p->getPath())
+            );
+        }
+
+        $form = $this->createForm(ProductType::class, $product);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            foreach ($product->getPictures() as $item) {
+
+                if ($item->getPath() instanceof UploadedFile) {
+                    $fileName = $fileUploader->upload($item->getPath());
+                    $item->setPath($fileName);
+                }
+
+                $item->setProduct($product);
+                $this->getDoctrine()->getManager()->persist($item);
+            }
+
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('product_index');
+        }
+
+        return $this->render('default/edit.html.twig', [
             'product' => $product,
             'form' => $form->createView(),
         ]);
