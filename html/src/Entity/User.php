@@ -36,7 +36,7 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $address;
 
@@ -46,12 +46,12 @@ class User implements UserInterface
     private $token;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
     private $stripeCustomerId;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $enable;
 
@@ -173,12 +173,12 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getStripeCustomerId(): ?int
+    public function getStripeCustomerId()
     {
         return $this->stripeCustomerId;
     }
 
-    public function setStripeCustomerId(int $stripeCustomerId): self
+    public function setStripeCustomerId($stripeCustomerId): self
     {
         $this->stripeCustomerId = $stripeCustomerId;
 

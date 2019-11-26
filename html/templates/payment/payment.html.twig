@@ -1,0 +1,110 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="col-12 col-md-7 col-paiement">
+    <div class="form-card">
+        {{ form_start(form, {attr: {id: form.vars.id}}) }}
+        {{ form_widget(form.token) }}
+        {{ form_end(form) }}
+        <button id="customButton" style="display: none;">Purchase</button>
+        <form class="form form-paiement-v3" name="payment-form" method="post" id="payment-form">
+            <div class="form-group row">
+                <label for="CardNumber" class="col-sm-4 col-form-label required">Numéro de carte</label>
+                <div class="col-sm-5">
+                    <div id="card-number-element" class="form-control field"></div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="expirationDate" class="col-sm-4 col-form-label required">Expiration</label>
+                <div class="col-sm-3">
+                    <div id="card-expiry-element" class="form-control field"></div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="Cryptogramme" class="col-sm-4 col-form-label required">Cryptogramme</label>
+                <div class="col-sm-3">
+                    <div id="card-cvc-element" class="form-control field"></div>
+                </div>
+            </div>
+            <div class="whitebox outcome d-none">
+                <div class="error"></div>
+                <div class="success">
+                    Success! Your Stripe token is <span class="token"></span>
+                </div>
+            </div>
+            <div class="form-row actions mt-4 mb-0">
+                <button type="submit" class="btn btn-primary">
+                    Payer
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascriptsCustom %}
+    <script type="text/javascript">
+        var stripe = Stripe('{{ stripe_public_key }}');
+        var elements = stripe.elements();
+
+        var style = {
+            base: {
+                'background-color': '#e9ecef',
+                iconColor: '#666EE8',
+                lineHeight: '40px',
+                fontFamily: 'Helvetica Neue',
+                fontSize: '15px',
+                border: '#000 1px solid !important',
+
+                '::placeholder': {
+                    color: '#666666',
+                },
+            },
+        };
+
+        var cardNumberElement = elements.create('cardNumber', {
+            style: style,
+            placeholder: 'N° de carte bancaire',
+        });
+        cardNumberElement.mount('#card-number-element');
+
+        var cardExpiryElement = elements.create('cardExpiry', {
+            style: style,
+            placeholder: 'MM / AA',
+        });
+        cardExpiryElement.mount('#card-expiry-element');
+
+        var cardCvcElement = elements.create('cardCvc', {
+            style: style,
+            placeholder: 'CVV',
+        });
+        cardCvcElement.mount('#card-cvc-element');
+
+
+        function setOutcome(result) {
+            var successElement = document.querySelector('.success');
+            var errorElement = document.querySelector('.error');
+            successElement.classList.remove('visible');
+            errorElement.classList.remove('visible');
+
+            if (result.token) {
+                $('#payment-form-token_token').val(result.token.id);
+                $('#payment-form-token').submit();
+            } else if (result.error) {
+                errorElement.textContent = result.error.message;
+                errorElement.classList.add('visible');
+            }
+        }
+
+        cardNumberElement.on('change', function(event) {
+            setOutcome(event);
+        });
+
+        $( "#payment-form" ).submit(function( e ) {
+            e.preventDefault();
+            stripe.createToken(cardNumberElement).then(setOutcome);
+        });
+
+    </script>
+{% endblock  %}
+
