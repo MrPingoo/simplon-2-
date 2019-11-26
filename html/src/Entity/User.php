@@ -161,12 +161,12 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getToken(): ?string
+    public function getToken()
     {
         return $this->token;
     }
 
-    public function setToken(string $token): self
+    public function setToken($token): self
     {
         $this->token = $token;
 

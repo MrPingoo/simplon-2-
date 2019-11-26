@@ -1,14 +1,6 @@
-{% trans_default_domain 'messages' %}
-{% block subject %}
-    {%- autoescape false -%}
-
-    {%- endautoescape -%}
-{% endblock %}
-
-{% block body_text %}
-    {{ data|raw }}
-{% endblock %}
-
 {% block body_html %}
-    {{ data|raw }}
+
+    Email : {{ user.email }}
+    URL : <a href="{{ url }}">Modifier votre mot de passe</a>
+
 {% endblock %}

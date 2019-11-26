@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+    <!--begin::Content-->
+    <div class="kt-grid__item kt-grid__item--fluid  kt-grid__item--order-tablet-and-mobile-1  kt-login__wrapper">
+
+        <!--begin::Body-->
+        <div class="kt-login__body">
+
+            <!--begin::Signin-->
+            <div class="kt-login__form">
+                <div class="kt-login__title">
+                    <h3>Demande de nouveau mot de passe</h3>
+                </div>
+
+                <!--begin::Form-->
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+
+                <div class="row">
+                    <div class="col-md-9 main-content">
+                        {{ form_start(form) }}
+
+                        <div class="form-group">
+                            {{ form_label(form.email, 'Email'|trans, { 'label_attr': {'class': ''}}) }}
+                            <div class="col-sm-9">
+                                {{ form_errors(form.email) }}
+                                {{ form_widget(form.email, { 'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+                        <div class="kt-login__actions">
+                            <button class="btn btn-primary">Valider</button>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+
+                <!--end::Form-->
+            </div>
+
+            <!--end::Signin-->
+        </div>
+
+        <!--end::Body-->
+    </div>
+
+    <!--end::Content-->
+{% endblock %}
+
+{% block javascriptsCustom %}{% endblock %}
