@@ -1,0 +1,15 @@
+
+{% for a in array %}
+    {{ a }}
+{% endfor %}
+
+
+{{ form_start(form) }}
+    {{ form_label(form.email) }}
+    {{ form_widget(form.email) }}
+    {{ form_label(form.address) }}
+    {{ form_widget(form.address) }}
+<input type="submit" value="Valider" />
+{{ form_end(form) }}
+
+<a href="{{ path('simplon_test') }}">Test</a>
