@@ -1,7 +1,71 @@
-> php bin/console doctrine:migrations:migrate
-> php bin/console make:migration
-> php bin/console make:auth
-> php bin/console make:user
-> php bin/console make:crud
-> php bin/console make:entity
-> php bin/console make:registration-form
+Copier le fichier ci-dessous dans html : 
+
+```
+# In all environments, the following files are loaded if they exist,
+# the latter taking precedence over the former:
+#
+#  * .env                contains default values for the environment variables needed by the app
+#  * .env.local          uncommitted file with local overrides
+#  * .env.$APP_ENV       committed environment-specific defaults
+#  * .env.$APP_ENV.local uncommitted environment-specific overrides
+#
+# Real environment variables win over .env files.
+#
+# DO NOT DEFINE PRODUCTION SECRETS IN THIS FILE NOR IN ANY OTHER COMMITTED FILES.
+#
+# Run "composer dump-env prod" to compile .env files for production use (requires symfony/flex >=1.2).
+# https://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
+
+###> symfony/framework-bundle ###
+APP_ENV=dev
+APP_SECRET=c57eede7a5d3b2a1bf63be1f86a9895d
+#TRUSTED_PROXIES=127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+#TRUSTED_HOSTS='^localhost|example\.com$'
+###< symfony/framework-bundle ###
+
+###> doctrine/doctrine-bundle ###
+# Format described at https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#connecting-using-a-url
+# For an SQLite database, use: "sqlite:///%kernel.project_dir%/var/data.db"
+# For a PostgreSQL database, use: "postgresql://db_user:db_password@127.0.0.1:5432/db_name?serverVersion=11"
+# IMPORTANT: You MUST configure your db driver and server version, either here or in config/packages/doctrine.yaml
+DATABASE_URL=mysql://root:root@db:3306/database_v2?serverVersion=5.7
+###< doctrine/doctrine-bundle ###
+
+###> symfony/swiftmailer-bundle ###
+# For Gmail as a transport, use: "gmail://username:password@localhost"
+# For a generic SMTP server, use: "smtp://localhost:25?encryption=&auth_mode="
+# Delivery is disabled by default via "null://localhost"
+# MAILER_URL=null://localhost
+MAILER_URL=smtp://mailhog:1025
+###< symfony/swiftmailer-bundle ###
+
+STRIPE_PUBLIC_KEY=abc
+STRIPE_SCRET_KEY=abc
+```
+
+Copier le fichier ci-dessous dans le docker (à la racine)
+
+```
+# Symfony application's path (absolute or relative)
+APP_PATH=./html
+
+# Project name
+PROJECT_NAME=simplon
+
+# TIMEZONE
+TIMEZONE=Europe/Paris
+
+# MySQL
+MYSQL_ROOT_PASSWORD=root
+MYSQL_DATABASE=database
+MYSQL_USER=user
+MYSQL_PASSWORD=user
+```
+
+docker-compose build
+docker-compose up -d
+docker-compose exec php bash
+$ composer install
+$ php bin/console doctrine:database:create
+$ php bin/console doctrine:migration:migrate
+Aller sur l'URL simplon.localhost et créer un compte
